@@ -25,9 +25,10 @@ def check_if_word_in_cards(cards: list[str], word: str) -> int:
     # iterate over the word and if the first letter of the work matches the current
     if word == "":
         return True
-    letter_index = find_letter_in_list(cards, word[0], 0)
+    letter_index = find_letter_in_list(cards.copy(), word[0], 0)
     if letter_index is not None:
-        return check_if_word_in_cards(cards, word[1:])
+        cards.pop(letter_index)
+        return check_if_word_in_cards(cards.copy(), word[1:])
     return False
 
 
@@ -53,4 +54,5 @@ def create_word(cards: list[str], words: Dict[str, int]) -> str:
 cards = ["h", "e", "l", "o", "t", "i", "s", "w", "r", "d"]
 words = {"hi": 1, "hello": 40, "world": 10, "this": 4, "a": 6, "test": 7}
 
-print(create_word(cards, words))
+# print(create_word(cards, words))
+print(check_if_word_in_cards(cards, "this"))
