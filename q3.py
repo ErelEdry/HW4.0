@@ -1,42 +1,49 @@
-def can_form_word(word, cards):
+def find_letter_in_list(arr, letter, index):
     """
-    Check if a word can be formed using the given cards
+    Find the index of a letter in a list.
     """
-    cards_count = {}
-    # Count the occurrences of each card
-    for card in cards:
-        if card in cards_count:
-            cards_count[card] += 1
-        else:
-            cards_count[card] = 1
-    # Check if the word can be formed with the cards
-    for char in word:
-        if char not in cards_count or cards_count[char] == 0:
-            return False
-        cards_count[char] -= 1
-    return True
+    if len(arr) == 0:
+        return None
+    if arr[0] == letter:
+        return index
+    index += 1
+    arr.pop(0)
+    return find_letter_in_list(arr, letter, index)
 
-def create_words_recursive(words, cards, max_score, best_word):
-        if len(words) == 0:
-            return max_score, best_word
-        word = list(words.keys())[0]
-        remaining_words = dict(list(words.items())[1:])
-        # Check if the word can be formed with the cards
-        if can_form_word(word, cards):
-            score = words[word]
-            # Update the max score and best word if the current word has a higher score
-            if score > max_score:
-                max_score = score
-                best_word = word
-        return create_words_recursive(remaining_words, cards, max_score, best_word)
+
+def check_if_word_in_cards(cards, word):
+    """
+    Check if a word can be formed using the cards.
+    """
+    # iterate over the word and if the first letter of the work matches the current
+    if word == "":
+        return True
+    letter_index = find_letter_in_list(cards.copy(), word[0], 0)
+    if letter_index is not None:
+        cards.pop(letter_index)
+        return check_if_word_in_cards(cards.copy(), word[1:])
+    return False
+
+
+# return the score for the longest word that we can create
+def create_words_recursive(cards, words, max_value, max_value_word):
+    """
+    Recursively find the word with the highest value that can be made from the cards.
+    """
+    # iterate over all the words and return the highest value
+    words=words.copy()
+    if len(words) == 0:
+        return max_value_word
+    word, value = words.popitem()
+    if check_if_word_in_cards(cards.copy(), word):
+        if max_value == None or max_value < value:
+            max_value_word = word
+            max_value = value
+    return create_words_recursive(cards, words, max_value, max_value_word)
+
+
 def create_words(words, cards):
     """
-    Get the highest word score with our letters cards
+    Find the highest value word that can be made from the cards.
     """
-    max_score, best_word = create_words_recursive(words, cards, 0, None)
-    # Return the best word or an empty list if no word can be formed
-    return [best_word] if best_word else []
-
-words = {'hi': 11, 'hello': 40, 'world': 10, 'this': 4, 'a': 6, 'test': 73}
-cards = ['h', 'e', 'l', 'o', 't', 'i', 's', 'w', 'r', 'd']
-print(create_words(words, cards))
+    return create_words_recursive(cards, words, None, "")
