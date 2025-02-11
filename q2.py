@@ -1,3 +1,6 @@
+import time
+from turtledemo.penrose import start
+
 
 def divide_pancakes_extended_rec(pancakes, total_size,current_sum):
     """

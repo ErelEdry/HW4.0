@@ -40,6 +40,3 @@ def lightbulb_solver_with_steps(lightbulb_array, target_array):
     return lightbulb_solver_recursive_with_steps(lightbulb_array, target_array, 0, []) or [-1] #if the result is None because we cant find a solution,so [-1]
 
 
-lightbulb_array = [False, False, False, False, False]
-target_array = [True, True, True, False, False]
-print(lightbulb_solver_with_steps(lightbulb_array, target_array))
